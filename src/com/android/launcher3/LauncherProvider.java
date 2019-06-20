@@ -71,6 +71,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+// 核心数据库类，负责launcher.db的创建与维护。
 public class LauncherProvider extends ContentProvider {
     private static final String TAG = "LauncherProvider";
     private static final boolean LOGD = false;
@@ -451,6 +452,7 @@ public class LauncherProvider extends ContentProvider {
      *   3) From a partner configuration APK, already in the system image
      *   4) The default configuration for the particular device
      */
+    // 加载默认配置的地方
     synchronized private void loadDefaultFavoritesIfNecessary() {
         SharedPreferences sp = Utilities.getPrefs(getContext());
 
@@ -593,6 +595,11 @@ public class LauncherProvider extends ContentProvider {
             }
         }
 
+        /**
+         * launcher.db数据库中包含两张表，分别是：
+         * workspaceScreens：对应桌面的每一页，桌面可以左右滑动几页，就有几条记录。
+         * favorites：用于存储桌面上显示的元素，包含应用快捷图标、文件夹、小部件，每一个元素对应一条记录。
+         */
         @Override
         public void onCreate(SQLiteDatabase db) {
             if (LOGD) Log.d(TAG, "creating new launcher database");
@@ -620,6 +627,11 @@ public class LauncherProvider extends ContentProvider {
             }
 
             // Set the flag for empty DB
+            /**
+             * 参考: loadDefaultFavoritesIfNecessary函数
+             * 这里使用这个标记判断是否需要加载默认的workspace配置数据到数据库，最后一行代码clearFlagEmptyDbCreated方法调用，用于清空了这个标记，下次就不需要再次加载了。
+             * 从中得出一个结论，launcher正常在首次加载时，才会加载默认配置到数据库，其他情况是不会加载的。
+             */
             Utilities.getPrefs(mContext).edit().putBoolean(EMPTY_DATABASE_CREATED, true).commit();
         }
 
@@ -628,6 +640,7 @@ public class LauncherProvider extends ContentProvider {
                     Process.myUserHandle());
         }
 
+        // optional 为了避免重复建表
         private void addFavoritesTable(SQLiteDatabase db, boolean optional) {
             Favorites.addTableToDb(db, getDefaultUserSerial(), optional);
         }
@@ -822,6 +835,7 @@ public class LauncherProvider extends ContentProvider {
 
         /**
          * Clears all the data for a fresh start.
+         * 清空所有数据
          */
         public void createEmptyDB(SQLiteDatabase db) {
             try (SQLiteTransaction t = new SQLiteTransaction(db)) {

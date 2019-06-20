@@ -59,6 +59,7 @@ import java.util.ArrayList;
 /**
  * A ViewGroup that coordinates dragging across its descendants
  */
+//DragLayer:一个用来负责分发事件的ViewGroup。
 public class DragLayer extends BaseDragLayer<Launcher> {
 
     public static final int ALPHA_INDEX_OVERLAY = 0;

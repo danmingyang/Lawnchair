@@ -51,6 +51,16 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * Layout parsing code for auto installs layout
  */
+
+/**
+ * 这个默认配置是什么呢？就是我们首次使用launcher的时候，
+ * 桌面上默认显示应用图标、文件夹、小部件等元素的配置。在实际的项目中，
+ * 需要按照需求去配置哪些应用图标需要显示，哪些需要隐藏，就是在这个默认配置文件中修改的，
+ * 这个文件就是default_workspace.xml。
+ *
+ * AutoInstallsLayout: launcher在解析xml时，把所有解析过程都封装进了AutoInstallsLayout这个类
+ *
+ */
 public class AutoInstallsLayout {
     private static final String TAG = "AutoInstalls";
     private static final boolean LOGD = false;
@@ -168,6 +178,7 @@ public class AutoInstallsLayout {
 
     protected SQLiteDatabase mDb;
 
+    // layoutId就是对应配置文件的资源id，正常会放在res/xml目录下，rootTag是配置文件根节点标记的名字，所以代码和配置文件中要匹配起来，不然会解析异常。
     public AutoInstallsLayout(Context context, AppWidgetHost appWidgetHost,
             LayoutParserCallback callback, Resources res,
             int layoutId, String rootTag) {
@@ -287,7 +298,7 @@ public class AutoInstallsLayout {
         }
         return 0;
     }
-
+    // Favorites.ITEM_TYPE_APPLICATION类型数据插入到数据库
     protected long addShortcut(String title, Intent intent, int type) {
         long id = mCallback.generateNewItemId();
         mValues.put(Favorites.INTENT, intent.toUri(0));
@@ -310,7 +321,7 @@ public class AutoInstallsLayout {
         parsers.put(TAG_SHORTCUT, new ShortcutParser(mSourceRes));
         return parsers;
     }
-
+    // launcher对各个类型的节点解析也进行了封装，每个解析器都实现了TagParser接口。
     protected ArrayMap<String, TagParser> getLayoutElementsMap() {
         ArrayMap<String, TagParser> parsers = new ArrayMap<>();
         parsers.put(TAG_APP_ICON, new AppShortcutParser());

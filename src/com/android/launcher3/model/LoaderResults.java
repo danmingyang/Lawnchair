@@ -49,6 +49,7 @@ import java.util.concurrent.Executor;
 /**
  * Helper class to handle results of {@link com.android.launcher3.model.LoaderTask}.
  */
+//该类是Launcher3 P版本新增的，把之前绑定view的操作都封装了起来
 public class LoaderResults {
 
     private static final String TAG = "LoaderResults";

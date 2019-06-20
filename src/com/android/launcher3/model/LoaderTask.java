@@ -233,6 +233,8 @@ public class LoaderTask implements Runnable {
         this.notify();
     }
 
+    //loadWorkspace方法主要做了两件事情，一件是加载默认配置xml文件中的items，并把默认数据存入数据库，
+    //另一件是加载数据库中的数据到缓存，当然还会做各种有效性校验
     private void loadWorkspace() {
         final Context context = mApp.getContext();
         final ContentResolver contentResolver = context.getContentResolver();

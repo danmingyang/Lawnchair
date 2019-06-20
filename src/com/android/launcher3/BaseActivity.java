@@ -40,6 +40,7 @@ import java.io.PrintWriter;
 import java.lang.annotation.Retention;
 import java.util.ArrayList;
 
+// 惟一的Activity
 public abstract class BaseActivity extends Activity implements UserEventDelegate{
 
     public static final int INVISIBLE_BY_STATE_HANDLER = 1 << 0;

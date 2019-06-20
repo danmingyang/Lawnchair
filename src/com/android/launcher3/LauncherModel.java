@@ -81,6 +81,7 @@ import java.util.concurrent.Executor;
  * LauncherModel object held in a static. Also provide APIs for updating the database state
  * for the Launcher.
  */
+//LauncherModel：这是workspace数据加载最核心的一个类，负责workspace数据的加载和更新，并维护了所有缓存，还负责监听package的各种变化。
 public class LauncherModel extends BroadcastReceiver
         implements LauncherAppsCompat.OnAppsChangedCallbackCompat {
     private static final boolean DEBUG_RECEIVER = false;
@@ -89,6 +90,7 @@ public class LauncherModel extends BroadcastReceiver
 
     private final MainThreadExecutor mUiExecutor = new MainThreadExecutor();
     @Thunk final LauncherAppState mApp;
+    // 同步锁
     @Thunk final Object mLock = new Object();
     @Thunk
     LoaderTask mLoaderTask;
@@ -397,6 +399,7 @@ public class LauncherModel extends BroadcastReceiver
         if (DEBUG_RECEIVER) Log.d(TAG, "onReceive intent=" + intent);
 
         final String action = intent.getAction();
+        //设备当前区域设置已更改时发出的广播
         if (Intent.ACTION_LOCALE_CHANGED.equals(action)) {
             // If we have changed locale we need to clear out the labels in all apps/workspace.
             forceReload();

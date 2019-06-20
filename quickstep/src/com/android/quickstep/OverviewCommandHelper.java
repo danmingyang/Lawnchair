@@ -156,6 +156,16 @@ public class OverviewCommandHelper {
                     mContext.unregisterReceiver(mOtherHomeAppUpdateReceiver);
                 }
 
+                /**
+                 * Android中当多个应用都接收同一个广播时，会导致很多系统进程同时开启，这会导致系统卡顿。
+                 * 有了ssp我们可以定向的接收或发送某一特定广播达到优化系统的效果。
+                 *动态注册广播:当activity关掉后，广播失效
+                 *静态广播: 只要设备开启，广播接收器就打开着
+                 * 这里是定向广播：接收安装某一特定应用的系统广播
+                 * // PatternMatcher.PATTERN_LITERAL相当于ssp
+                 * // PatternMatcher.PATTERN_PREFIX相当于sspPrefix
+                 * // atternMatcher.PATTERN_SIMPLE_GLOB相当于sspPattern
+                 */
                 mUpdateRegisteredPackage = defaultHome.getPackageName();
                 IntentFilter updateReceiver = new IntentFilter(ACTION_PACKAGE_ADDED);
                 updateReceiver.addAction(ACTION_PACKAGE_CHANGED);

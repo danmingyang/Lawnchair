@@ -29,7 +29,7 @@ import ch.deletescape.lawnchair.LawnchairPreferences;
 import com.android.launcher3.CellLayout.ContainerType;
 import com.android.launcher3.widget.LauncherAppWidgetHostView;
 import org.jetbrains.annotations.NotNull;
-
+//CellLayout中存放子View（即应用图标或小控件）的ViewGroup，即真正包含子View的容器
 public class ShortcutAndWidgetContainer extends ViewGroup implements LawnchairPreferences.OnPreferenceChangeListener {
     static final String TAG = "ShortcutAndWidgetContainer";
 

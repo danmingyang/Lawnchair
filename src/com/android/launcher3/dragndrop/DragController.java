@@ -49,6 +49,7 @@ import java.util.ArrayList;
 /**
  * Class for initiating a drag within a view or across multiple views.
  */
+//DragLayer只是一个ViewGroup，具体的拖拽的处理都放到了DragController中
 public class DragController implements DragDriver.EventListener, TouchController {
     private static final boolean PROFILE_DRAWING_DURING_DRAG = false;
 

@@ -61,6 +61,9 @@ open class LawnchairLauncher : NexusLauncherActivity(),
         LawnchairPreferences.OnPreferenceChangeListener,
         ColorEngine.OnColorChangeListener {
     val hideStatusBarKey = "pref_hideStatusBar"
+    //var:可变
+    //val:不可变
+    // by lazy真正做到了声明的同时也指定了延迟初始化时的行为，在属性被第一次被使用的时候能自动初始化
     val gestureController by lazy { GestureController(this) }
     val background by lazy { findViewById<LawnchairBackgroundView>(R.id.lawnchair_background)!! }
     val dummyView by lazy { findViewById<View>(R.id.dummy_view)!! }
@@ -85,6 +88,7 @@ open class LawnchairLauncher : NexusLauncherActivity(),
 
         super.onCreate(savedInstanceState)
 
+        // hook 弹框com.android.internal.widget.DialogTitle
         hookGoogleSansDialogTitle()
 
         lawnchairPrefs.registerCallback(prefCallback)

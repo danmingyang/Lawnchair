@@ -38,7 +38,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import static ch.deletescape.lawnchair.settings.ui.SettingsActivity.NOTIFICATION_BADGING;
-
+//LauncherAppState：单例对象，构造方法中初始化对象、注册应用安装、卸载、更新，配置变化等广播。
+//这些广播用来实时更新桌面图标等，其receiver的实现在LauncherModel类中，LauncherModel也在这里初始化
 public class LauncherAppState {
 
     public static final String ACTION_FORCE_ROLOAD = "force-reload-launcher";
@@ -96,6 +97,11 @@ public class LauncherAppState {
         mWidgetCache = new WidgetPreviewLoader(mContext, mIconCache);
         mModel = new LauncherModel(this, mIconCache, AppFilter.newInstance(mContext));
 
+        /**
+         * 添加回调，处理package删除，安装，更新等
+         * LauncherApps是SDK开放给launcher使用的接口类，launcher实现了LauncherApps.Callback接口，然后通过registerCallback方法注册监听，当发生应用改变时，就可以收到回调，进而进行相应处理。
+         * 在新应用安装完成后，WrappedCallback实现类的onPackageAdded方法会被回调，再交给OnAppsChangedCallbackCompat接口实现处理。
+         */
         LauncherAppsCompat.getInstance(mContext).addOnAppsChangedCallback(mModel);
 
         // Register intent receivers

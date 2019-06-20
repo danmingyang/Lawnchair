@@ -37,7 +37,7 @@ import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ControlType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
-
+//Workspace下的快捷栏
 public class Hotseat extends FrameLayout implements LogContainerProvider, Insettable {
 
     private final Launcher mLauncher;

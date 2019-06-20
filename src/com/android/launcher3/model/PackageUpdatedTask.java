@@ -128,15 +128,20 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
                 // Since package was just updated, the target must be available now.
                 flagOp = FlagOp.removeFlag(ShortcutInfo.FLAG_DISABLED_NOT_AVAILABLE);
                 break;
+                //
             case OP_REMOVE: {
+                // 移除icon缓存
                 for (int i = 0; i < N; i++) {
                     iconCache.removeIconsForPkg(packages[i], mUser);
                 }
                 // Fall through
+                // 卸载之后，后面要更新应用卸载所引起的桌面图标和快捷方式
+                //注意：这里并没有break，它是直接往下走的，是直接走进了OP_UNAVAILABLE逻辑中
             }
             case OP_UNAVAILABLE:
                 for (int i = 0; i < N; i++) {
                     if (DEBUG) Log.d(TAG, "mAllAppsList.removePackage " + packages[i]);
+                    // 更新AllAppsList中的缓存数据
                     appsList.removePackage(packages[i], mUser);
                     app.getWidgetCache().removePackage(packages[i], mUser);
                 }
@@ -192,6 +197,7 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
             final boolean isNewApkAvailable = mOp == OP_ADD || mOp == OP_UPDATE;
             synchronized (dataModel) {
                 for (ItemInfo info : dataModel.itemsIdMap) {
+                    // 判断是否shortcut
                     if (info instanceof ShortcutInfo && mUser.equals(info.user)) {
                         ShortcutInfo si = (ShortcutInfo) info;
                         boolean infoUpdated = false;
@@ -208,7 +214,7 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
                                 infoUpdated = true;
                             }
                         }
-
+                        // 匹配到被卸载应用的包名
                         ComponentName cn = si.getTargetComponent();
                         if (cn != null && matcher.matches(si, cn)) {
                             AppInfo appInfo = addedOrUpdatedApps.get(cn);
@@ -309,6 +315,7 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
                 }
             }
 
+            //更新Workspace和文件夹中的shorcut，对于卸载应用来说，似乎没有意义
             bindUpdatedShortcuts(updatedShortcuts, mUser);
             if (!removedShortcuts.isEmpty()) {
                 deleteAndBindComponentsRemoved(ItemInfoMatcher.ofItemIds(removedShortcuts, false));
@@ -351,12 +358,14 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
             ItemInfoMatcher removeMatch = ItemInfoMatcher.ofPackages(removedPackages, mUser)
                     .or(ItemInfoMatcher.ofComponents(removedComponents, mUser))
                     .and(ItemInfoMatcher.ofItemIds(removedShortcuts, true));
+            // 删除数据库中数据，删除其他跟此包名相关的界面组件，如widget
             deleteAndBindComponentsRemoved(removeMatch);
 
             // Remove any queued items from the install queue
             InstallShortcutReceiver.removeFromInstallQueue(context, removedPackages, mUser);
         }
 
+        //刷新AllApps界面
         if (!removedApps.isEmpty()) {
             // Remove corresponding apps from All-Apps
             scheduleCallbackTask(new CallbackTask() {

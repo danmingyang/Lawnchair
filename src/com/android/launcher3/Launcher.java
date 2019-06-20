@@ -283,6 +283,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         prefs.getDockGridSize();
         prefs.getDrawerGridSize();
         mOldConfig = new Configuration(getResources().getConfiguration());
+        //建立LauncherModel对象
         mModel = app.setLauncher(this);
         initDeviceProfile(app.getInvariantDeviceProfile());
 
@@ -1880,7 +1881,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         // computed before the next layout
         mWorkspace.unlockWallpaperFromDefaultPageOnNextLayout();
     }
-
+    // 根据实际计算所得的屏幕个数，创建屏幕的View，launcher中每一屏对应的View是一个CellLayout。
     private void bindAddScreens(ArrayList<Long> orderedScreenIds) {
         int count = orderedScreenIds.size();
         for (int i = 0; i < count; i++) {
@@ -1918,6 +1919,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
      *
      * Implementation of the method from LauncherModel.Callbacks.
      */
+    //bindItems会循环创建对于类型的View，刷新显示到桌面上，这边创建的View就是我们最终看到的应用图标、文件夹、小部件。
     @Override
     public void bindItems(final List<ItemInfo> items, final boolean forceAnimateIcons) {
         // Get the list of added items and intersect them with the set of items here

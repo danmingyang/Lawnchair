@@ -63,6 +63,7 @@ import java.util.Stack;
 /**
  * Cache of application icons.  Icons can be made from any thread.
  */
+//IconCache：图标缓存类，应用程序icon和title的缓存，内部类创建了数据库app_icons.db。
 public class IconCache {
 
     private static final String TAG = "Launcher.IconCache";

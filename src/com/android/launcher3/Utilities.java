@@ -830,6 +830,7 @@ public final class Utilities {
     }
 
     public static void requestStoragePermission(Activity activity) {
+        // ActivityCompat.requestPermissions 运行时申请权限
         ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, LawnchairLauncher.REQUEST_PERMISSION_STORAGE_ACCESS);
     }
 

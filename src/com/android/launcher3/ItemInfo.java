@@ -27,6 +27,8 @@ import com.android.launcher3.util.ContentWriter;
 /**
  * Represents an item in the launcher.
  */
+//ItemInfo：桌面上每个Item的信息数据结构，包括在第几屏、第几行、第几列、宽高等信息；
+//该对象与数据库中记录一一对应；该类有多个子类，譬如FolderIcon的FolderInfo、BubbleTextView的ShortcutInfo等。
 public class ItemInfo {
 
     public static final int NO_ID = -1;

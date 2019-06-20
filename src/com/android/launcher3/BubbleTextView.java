@@ -71,6 +71,7 @@ import org.jetbrains.annotations.NotNull;
  * because we want to make the bubble taller than the text and TextView's clip is
  * too aggressive.
  */
+// BubblTextView：图标都基于他，继承自TextView。
 public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, OnResumeCallback,
         ColorEngine.OnColorChangeListener {
 

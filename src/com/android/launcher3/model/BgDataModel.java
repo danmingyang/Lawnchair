@@ -55,6 +55,7 @@ import java.util.Map;
 /**
  * All the data stored in-memory and managed by the LauncherModel
  */
+// 该类是Launcher3 O版本新增的，对memory缓存作了封装，缓存了所有app、shortcut、folder、widget、screen等数据
 public class BgDataModel {
 
     private static final String TAG = "BgDataModel";

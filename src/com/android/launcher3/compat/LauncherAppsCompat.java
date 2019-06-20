@@ -30,6 +30,7 @@ import com.android.launcher3.shortcuts.ShortcutInfoCompat;
 import com.android.launcher3.util.PackageUserKey;
 import java.util.List;
 
+// LauncherAppsCompat 监听app的变化
 public abstract class LauncherAppsCompat {
 
     public interface OnAppsChangedCallbackCompat {

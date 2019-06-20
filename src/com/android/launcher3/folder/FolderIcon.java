@@ -79,6 +79,7 @@ import java.util.List;
 /**
  * An icon that can appear on in the workspace representing an {@link Folder}.
  */
+// FolderIcon：文件夹图标
 public class FolderIcon extends FrameLayout implements FolderListener {
     @Thunk Launcher mLauncher;
     @Thunk Folder mFolder;

@@ -220,6 +220,7 @@ public class SecondaryDropTarget extends ButtonDropTarget implements OnAlarmList
      * Performs the drop action and returns the target component for the dragObject or null if
      * the action was not performed.
      */
+    // launcher中最终通过一个Intent启动了一个Activity，发起卸载操作，实际的卸载功能并不是launcher完成的，只是提供了一个交互的入口
     protected ComponentName performDropAction(View view, ItemInfo info) {
         if (mCurrentAccessibilityAction == RECONFIGURE) {
             int widgetId = getReconfigurableWidgetId(view);

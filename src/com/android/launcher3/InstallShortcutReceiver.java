@@ -62,6 +62,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 应用程序可以创建自己的快捷方式到桌面,其实就是依赖于InstallShortcutReceiver这一个广播接收器
+ * 这样就创建了一个图标是R.mipmap.ic_launcher， 名字是this is a shortcut，点击之后跳转到MainActivity的快捷方式
+ * 步骤：
+ * 1.
+ *   首先需要在AndroidMainfest.xml中添加权限：
+ * <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+ * 2.
+ *  //需要再AndroiMainfest.xml中添加权限
+ * Intent shortcutIntent = new Intent(this, MainActivity.class);
+ *  //Intent 的 action
+ * Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+ *  //快捷方式图标
+ * intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, R.mipmap.ic_launcher);
+ *  //快捷方式名字
+ * intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "this is a shortcut");
+ *  //快捷方式 Intent，点击图标跳转的Intent
+ * intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+ * sendBroadcast(intent);
+ * // 发送广播，在首先需要在AndroidMainfest.xml 中注册receiver
+ *
+ */
 public class InstallShortcutReceiver extends BroadcastReceiver {
 
     private static final int MSG_ADD_TO_QUEUE = 1;
@@ -194,9 +216,11 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
     }
 
     public void onReceive(Context context, Intent data) {
+        //如果action不为ACTION_INSTALL_SHORTCUT就说明接收到的不是我们期望的广播就不向下执行
         if (!ACTION_INSTALL_SHORTCUT.equals(data.getAction())) {
             return;
         }
+        // 使用获取到的Intent对象来创建PendingInstallShortcutInfo 对象
         PendingInstallShortcutInfo info = createPendingInfo(context, data);
         if (info != null) {
             if (!info.isLauncherActivity()) {

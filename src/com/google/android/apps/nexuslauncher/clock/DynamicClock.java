@@ -43,6 +43,8 @@ public class DynamicClock extends BroadcastReceiver
                     Intent.ACTION_PACKAGE_ADDED,
                     Intent.ACTION_PACKAGE_CHANGED),
                 null, handler);
+
+        // 双冒号 lambda表达式this::updateMainThread  ()->updateMainThread()
         handler.post(this::updateMainThread);
 
         mContext.registerReceiver(new BroadcastReceiver() {

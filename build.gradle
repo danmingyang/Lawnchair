@@ -38,10 +38,10 @@ android {
 
     signingConfigs {
         ci {
-            storeFile file("debug.jks")
-            storePassword System.getenv("STORE_PASSWORD")
-            keyAlias "Lawnchair"
-            keyPassword System.getenv("KEY_PASSWORD")
+            storeFile file("EarnMoney_keystore")
+            storePassword "AppTreeHot123456"
+            keyAlias "AppTreeHot"
+            keyPassword "AppTreeHot123456"
         }
     }
     defaultConfig {

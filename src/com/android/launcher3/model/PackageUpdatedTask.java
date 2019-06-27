@@ -18,11 +18,12 @@ package com.android.launcher3.model;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.LauncherActivityInfo;
 import android.os.Process;
 import android.os.UserHandle;
 import android.util.ArrayMap;
 import android.util.Log;
-
+import android.util.Pair;
 import ch.deletescape.lawnchair.LawnchairPreferences;
 import ch.deletescape.lawnchair.LawnchairUtilsKt;
 import com.android.launcher3.AllAppsList;
@@ -51,7 +52,6 @@ import com.android.launcher3.util.ItemInfoMatcher;
 import com.android.launcher3.util.LongArrayMap;
 import com.android.launcher3.util.PackageManagerHelper;
 import com.android.launcher3.util.PackageUserKey;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -85,6 +85,30 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
         mOp = op;
         mUser = user;
         mPackages = packages;
+    }
+
+    private void updateToWorkSpace(Context context, LauncherAppState app, AllAppsList appsList){
+        final List<UserHandle> profiles = UserManagerCompat.getInstance(context).getUserProfiles();
+        ArrayList<Pair<ItemInfo, Object>> installQueue = new ArrayList<>();
+
+        ArrayList<InstallShortcutReceiver.PendingInstallShortcutInfo> added = new ArrayList<InstallShortcutReceiver.PendingInstallShortcutInfo>();
+        for (UserHandle user : profiles) {
+            final List<LauncherActivityInfo> apps = LauncherAppsCompat.getInstance(context).getActivityList(null, user);
+            synchronized (this) {
+                for (LauncherActivityInfo info : apps) {
+                    for (AppInfo appInfo : appsList.added) {
+                        if(info.getComponentName().equals(appInfo.componentName)){
+                            InstallShortcutReceiver.PendingInstallShortcutInfo mPendingInstallShortcutInfo =  new InstallShortcutReceiver.PendingInstallShortcutInfo(info,context);
+                            added.add(mPendingInstallShortcutInfo);
+                            installQueue.add(mPendingInstallShortcutInfo.getItemInfo());
+                        }
+                    }
+                }
+            }
+        }
+        if (!added.isEmpty()) {
+            app.getModel().addAndBindAddedWorkspaceItems(installQueue);
+        }
     }
 
     @Override
@@ -171,6 +195,11 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
 
         final ArrayList<AppInfo> addedOrModified = new ArrayList<>();
         addedOrModified.addAll(appsList.added);
+        //@author:dmy  应用安装后，添加到桌面
+        if(FeatureFlags.NO_ENABLE_HOME_DRAWER){
+            updateToWorkSpace(context, app, appsList);
+        }
+
         appsList.added.clear();
         addedOrModified.addAll(appsList.modified);
         appsList.modified.clear();

@@ -347,7 +347,7 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
         return name;
     }
 
-    private static class PendingInstallShortcutInfo {
+    public static class PendingInstallShortcutInfo {
 
         final LauncherActivityInfo activityInfo;
         final ShortcutInfoCompat shortcutInfo;

@@ -24,7 +24,6 @@ import android.graphics.Matrix
 import android.graphics.Rect
 import android.os.Build
 import android.support.annotation.Keep
-import android.util.Log
 import android.util.Pair
 import android.view.View
 import android.view.animation.PathInterpolator
@@ -32,7 +31,8 @@ import ch.deletescape.lawnchair.util.InvertedMultiValueAlpha
 import ch.deletescape.lawnchair.views.LawnchairBackgroundView
 import com.android.launcher3.*
 import com.android.launcher3.BaseActivity.INVISIBLE_BY_APP_TRANSITIONS
-import com.android.launcher3.LauncherState.*
+import com.android.launcher3.LauncherState.ALL_APPS
+import com.android.launcher3.LauncherState.NORMAL
 import com.android.launcher3.shortcuts.DeepShortcutView
 import com.android.launcher3.util.ComponentKey
 import com.android.launcher3.util.MultiValueAlpha
@@ -231,7 +231,7 @@ class LawnchairAppTransitionManagerImpl(context: Context) : LauncherAppTransitio
 
         dragLayer.scrim.hideSysUiScrim(true)
         // Pause page indicator animations as they lead to layer trashing.
-        launcher.workspace.pageIndicator.pauseAnimations()
+         launcher.workspace.pageIndicator.pauseAnimations()
         dragLayer.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
         val endListener = if (launcher.isInState(ALL_APPS)) {

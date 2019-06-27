@@ -27,14 +27,19 @@ import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Property;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
-
+import android.widget.FrameLayout;
+import com.android.launcher3.DeviceProfile;
+import com.android.launcher3.Insettable;
+import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.util.Themes;
@@ -43,7 +48,7 @@ import com.android.launcher3.util.Themes;
  * {@link PageIndicator} which shows dots per page. The active page is shown with the current
  * accent color.
  */
-public class PageIndicatorDots extends View implements PageIndicator {
+public class PageIndicatorDots extends View implements Insettable, PageIndicator {
 
     private static final float SHIFT_PER_ANIMATION = 0.5f;
     private static final float SHIFT_THRESHOLD = 0.1f;
@@ -73,6 +78,7 @@ public class PageIndicatorDots extends View implements PageIndicator {
         }
     };
 
+    private final Launcher mLauncher;
     private final Paint mCirclePaint;
     private final float mDotRadius;
     private final int mActiveColor;
@@ -108,6 +114,7 @@ public class PageIndicatorDots extends View implements PageIndicator {
     public PageIndicatorDots(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        mLauncher = Launcher.getLauncher(context);
         mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCirclePaint.setStyle(Style.FILL);
         mDotRadius = getResources().getDimension(R.dimen.page_indicator_dot_size) / 2;
@@ -119,6 +126,40 @@ public class PageIndicatorDots extends View implements PageIndicator {
         mIsRtl = Utilities.isRtl(getResources());
     }
 
+    /**
+     * Pauses all currently running animations.
+     */
+    public void pauseAnimations() {
+        // author:dmy
+        stopAllAnimations();
+    }
+
+    /**
+     * Force-ends all currently running or paused animations.
+     */
+    public void skipAnimationsToEnd() {
+        // author:dmy
+        stopAllAnimations();
+    }
+
+    @Override
+    public void setInsets(Rect insets) {
+        DeviceProfile grid = mLauncher.getDeviceProfile();
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
+
+        if (grid.isVerticalBarLayout()) {
+            Rect padding = grid.workspacePadding;
+            lp.leftMargin = padding.left + grid.workspaceCellPaddingXPx;
+            lp.rightMargin = padding.right + grid.workspaceCellPaddingXPx;
+            lp.bottomMargin = padding.bottom;
+        } else {
+            lp.leftMargin = lp.rightMargin = 0;
+            lp.gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+            lp.bottomMargin = grid.hotseatBarSizePx + insets.bottom;
+        }
+        setLayoutParams(lp);
+    }
+
     @Override
     public void setScroll(int currentScroll, int totalScroll) {
         if (mNumPages > 1) {
@@ -126,6 +167,10 @@ public class PageIndicatorDots extends View implements PageIndicator {
                 currentScroll = totalScroll - currentScroll;
             }
             int scrollPerPage = totalScroll / (mNumPages - 1);
+            // 防止分母为0报错
+            if (scrollPerPage <= 0){
+                return;
+            }
             int pageToLeft = currentScroll / scrollPerPage;
             int pageToLeftScroll = pageToLeft * scrollPerPage;
             int pageToRightScroll = pageToLeftScroll + scrollPerPage;

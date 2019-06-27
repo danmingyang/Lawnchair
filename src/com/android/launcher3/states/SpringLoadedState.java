@@ -19,12 +19,10 @@ import static com.android.launcher3.LauncherAnimUtils.SPRING_LOADED_TRANSITION_M
 import static com.android.launcher3.states.RotationHelper.REQUEST_LOCK;
 
 import android.graphics.Rect;
-
 import ch.deletescape.lawnchair.states.HomeState;
 import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.InstallShortcutReceiver;
 import com.android.launcher3.Launcher;
-import com.android.launcher3.LauncherState;
 import com.android.launcher3.Workspace;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 
@@ -77,7 +75,8 @@ public class SpringLoadedState extends HomeState {
     public void onStateEnabled(Launcher launcher) {
         Workspace ws = launcher.getWorkspace();
         ws.showPageIndicatorAtCurrentScroll();
-        ws.getPageIndicator().setShouldAutoHide(false);
+        // @author:dmy 设置自动隐藏 改成PageIndicatorDots报错，so直接注释掉
+//        ws.getPageIndicator().setShouldAutoHide(false);
 
         // Prevent any Un/InstallShortcutReceivers from updating the db while we are
         // in spring loaded mode
@@ -97,7 +96,8 @@ public class SpringLoadedState extends HomeState {
 
     @Override
     public void onStateDisabled(final Launcher launcher) {
-        launcher.getWorkspace().getPageIndicator().setShouldAutoHide(true);
+        // @author:dmy 设置自动隐藏 改成PageIndicatorDots报错，so直接注释掉
+//        launcher.getWorkspace().getPageIndicator().setShouldAutoHide(true);
 
         // Re-enable any Un/InstallShortcutReceiver and now process any queued items
         InstallShortcutReceiver.disableAndFlushInstallQueue(

@@ -811,6 +811,7 @@ public final class Utilities {
     }
 
     public static void pinSettingsShortcut(Context context) {
+        //isRequestPinShortcutSupported查看，该APP是否支持国定快捷方式
         if (!ShortcutManagerCompat.isRequestPinShortcutSupported(context)) return;
         ShortcutManagerCompat.requestPinShortcut(context, new ShortcutInfoCompat.Builder(context, "settings")
                 .setIntent(new Intent(context, SettingsActivity.class).setAction(Intent.ACTION_MAIN))

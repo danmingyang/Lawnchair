@@ -200,6 +200,7 @@ public class DragController implements DragDriver.EventListener, TouchController
         }
 
         mLauncher.getDragLayer().performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        // 显示应用图标
         dragView.show(mMotionDownX, mMotionDownY);
         mDistanceSinceScroll = 0;
 
@@ -211,6 +212,7 @@ public class DragController implements DragDriver.EventListener, TouchController
 
         mLastTouch[0] = mMotionDownX;
         mLastTouch[1] = mMotionDownY;
+        //拖拽的移动处理
         handleMoveEvent(mMotionDownX, mMotionDownY);
         mLauncher.getUserEventDispatcher().resetActionDurationMillis();
         return dragView;
@@ -464,6 +466,7 @@ public class DragController implements DragDriver.EventListener, TouchController
     }
 
     private void handleMoveEvent(int x, int y) {
+        // 更新位置
         mDragObject.dragView.move(x, y);
 
         // Drop on someone?
@@ -471,6 +474,8 @@ public class DragController implements DragDriver.EventListener, TouchController
         DropTarget dropTarget = findDropTarget(x, y, coordinates);
         mDragObject.x = coordinates[0];
         mDragObject.y = coordinates[1];
+        //调用checkTouchMove()来检测进入某个DropTarget,DropTarget有实现onDragExit,onDragEnter,onDragOver方法需要处理
+        //比如说当拖动到文件夹上面会打开显示文件夹，拖动到删除区域改变颜色等
         checkTouchMove(dropTarget);
 
         // Check if we are hovering over the scroll areas

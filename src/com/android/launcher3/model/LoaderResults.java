@@ -133,6 +133,7 @@ public class LoaderResults {
         r = new Runnable() {
             public void run() {
                 Callbacks callbacks = mCallbacks.get();
+                // 如果callbacks为null，则说明已经被回收了  callbacks是Launcher对象的弱引用
                 if (callbacks != null) {
                     callbacks.clearPendingBinds();
                     callbacks.startBinding();
@@ -356,6 +357,7 @@ public class LoaderResults {
             public void run() {
                 Callbacks callbacks = mCallbacks.get();
                 if (callbacks != null) {
+                    // 这里将包含app信息的数据传进去
                     callbacks.bindAllApplications(list);
                 }
             }

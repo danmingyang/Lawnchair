@@ -1290,6 +1290,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
     private void acquireVelocityTrackerAndAddMovement(MotionEvent ev) {
         if (mVelocityTracker == null) {
+            //滑动速度跟踪器VelocityTracker, 这个类可以用来监听手指移动改变的速度;
             mVelocityTracker = VelocityTracker.obtain();
         }
         mVelocityTracker.addMovement(ev);

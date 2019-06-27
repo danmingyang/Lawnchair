@@ -149,6 +149,7 @@ import java.util.Set;
 /**
  * Default launcher application.
  */
+// Launcher 实现了Callbacks接口
 public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         LauncherModel.Callbacks, LauncherProviderChangeListener, UserEventDelegate{
     public static final String TAG = "Launcher";
@@ -325,7 +326,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         if (savedInstanceState != null) {
             currentScreen = savedInstanceState.getInt(RUNTIME_STATE_CURRENT_SCREEN, currentScreen);
         }
-
+        // 加载数据
         if (!mModel.startLoader(currentScreen)) {
             if (!internalStateHandled) {
                 // If we are not binding synchronously, show a fade in animation when

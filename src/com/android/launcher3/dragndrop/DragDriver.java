@@ -51,7 +51,7 @@ public abstract class DragDriver {
             case MotionEvent.ACTION_MOVE:
                 mEventListener.onDriverDragMove(ev.getX(), ev.getY());
                 break;
-            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_UP://抬起手指
                 mEventListener.onDriverDragMove(ev.getX(), ev.getY());
                 mEventListener.onDriverDragEnd(ev.getX(), ev.getY());
                 break;

@@ -317,6 +317,7 @@ public class LauncherModel extends BroadcastReceiver
     /**
      * Set this as the current Launcher activity object for the loader.
      */
+    // callbacks 其实是launcher对象  在LauncherAPPState中调用setLauncher方法
     public void initialize(Callbacks callbacks) {
         synchronized (mLock) {
             Preconditions.assertUIThread();
@@ -467,6 +468,7 @@ public class LauncherModel extends BroadcastReceiver
         InstallShortcutReceiver.enableInstallQueue(InstallShortcutReceiver.FLAG_LOADER_RUNNING);
         synchronized (mLock) {
             // Don't bother to start the thread if we know it's not going to do anything
+            // 只有在Launcher的Activity不为null时才进行数据加载，如果没有界面，就没必要执行数据加载了
             if (mCallbacks != null && mCallbacks.get() != null) {
                 final Callbacks oldCallbacks = mCallbacks.get();
                 // Clear any pending bind-runnables from the synchronized load process.

@@ -96,10 +96,13 @@ public class LauncherStateManager {
     // components may be run atomically - that is, all at once, instead of user-controlled. However,
     // atomic components are not restricted to this purpose; they can be user-controlled alongside
     // non atomic components as well.
+    // Enum 增加了dex 的大小,比常量多5到10倍的内存占用，用IntDef StringDef LongDef代替
+    //IntDef 还有一个 flag 属性是布尔类型的（LongDef 也有，SringDef 没有）,flag为false，仅仅作为枚举。 如果设置为 true，value 中的那些常量指定为标记性质的类型，这样客户端代码就通过 |、& 等操作符同时传递多个常量
     @IntDef(flag = true, value = {
             NON_ATOMIC_COMPONENT,
             ATOMIC_COMPONENT
     })
+    // @Retention 定义策略，是默认注解
     @Retention(RetentionPolicy.SOURCE)
     public @interface AnimationComponents {}
     public static final int NON_ATOMIC_COMPONENT = 1 << 0;

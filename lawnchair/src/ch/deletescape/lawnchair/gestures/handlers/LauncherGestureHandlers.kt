@@ -93,6 +93,7 @@ class OpenOverviewGestureHandler(context: Context, config: JSONObject?) : Gestur
     override val requiresForeground = true
 
     override fun onGestureTrigger(controller: GestureController, view: View?) {
+        //长按桌面空白处 弹出悬浮窗
         OptionsPopupView.showDefaultOptions(controller.launcher, controller.touchDownPoint.x, controller.touchDownPoint.y)
     }
 }

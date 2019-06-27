@@ -973,6 +973,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         }
 
         child.setHapticFeedbackEnabled(false);
+        // 给child添加长按时间监听
         child.setOnLongClickListener(ItemLongClickListener.INSTANCE_WORKSPACE);
         if (child instanceof DropTarget) {
             mDragController.addDropTarget((DropTarget) child);
@@ -1607,7 +1608,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         beginDragShared(child, source, (ItemInfo) dragObject,
                 new DragPreviewProvider(child), options);
     }
-
+    // DragPreviewProvider: 的作用有两点：1.通过调用createDragBitmap()方法生成随手指移动的图标，2：生成outline图标(显示在手指下面的那个白框)
     public DragView beginDragShared(View child, DragSource source, ItemInfo dragObject,
             DragPreviewProvider previewProvider, DragOptions dragOptions) {
         float iconScale = 1f;
@@ -1828,7 +1829,8 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         if (v == null || hasntMoved || !mCreateUserFolderOnDrop) return false;
         mCreateUserFolderOnDrop = false;
         final long screenId = getIdForScreen(target);
-
+        // 你放下的dragview下面是否是ShortcutInfo，而且你手放下的view也是ShortcutInfo，就合成文件夹
+        //FolderIcon fi = mLauncher.addFolder(target, container, screenId, targetCell[0], targetCell[1]);合成文件夹返回true
         boolean aboveShortcut = (v.getTag() instanceof ShortcutInfo);
         boolean willBecomeShortcut = (newView.getTag() instanceof ShortcutInfo);
 
@@ -1870,6 +1872,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         return false;
     }
 
+    //判断下面的view是否是文件夹，就进入到FolderIcon的Ondrop方法进行对addItem(item)
     boolean addToExistingFolderIfNecessary(View newView, CellLayout target, int[] targetCell,
             float distance, DragObject d, boolean external) {
         if (distance > mMaxDistanceForFolderCreation) return false;
@@ -1943,6 +1946,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
                 // If the item being dropped is a shortcut and the nearest drop
                 // cell also contains a shortcut, then create a folder with the two shortcuts.
+                // 判断是否合要成文件夹：createUserFolderIfNecessary   或者   加入到已经存在的文件夹：addToExistingFolderIfNecessary
                 if (createUserFolderIfNecessary(cell, container,
                         dropTargetLayout, mTargetCell, distance, false, d.dragView) ||
                         addToExistingFolderIfNecessary(cell, dropTargetLayout, mTargetCell,
@@ -2936,6 +2940,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     /**
      * Called at the end of a drag which originated on the workspace.
      */
+    // 拖拽完成，隐藏掉拖拽的view
     public void onDropCompleted(final View target, final DragObject d,
             final boolean success) {
 

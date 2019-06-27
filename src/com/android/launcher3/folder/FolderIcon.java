@@ -23,7 +23,6 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -37,7 +36,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import ch.deletescape.lawnchair.LawnchairLauncher;
 import ch.deletescape.lawnchair.LawnchairUtilsKt;
 import ch.deletescape.lawnchair.gestures.BlankGestureHandler;
@@ -72,7 +70,6 @@ import com.android.launcher3.dragndrop.DragView;
 import com.android.launcher3.touch.ItemClickHandler;
 import com.android.launcher3.util.Thunk;
 import com.android.launcher3.widget.PendingAddShortcutInfo;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -500,15 +497,15 @@ public class FolderIcon extends FrameLayout implements FolderListener {
         if (mFolder.getItemCount() == 0 && !mAnimating) return;
 
         final int saveCount = canvas.save();
-        canvas.clipPath(mBackground.getClipPath());
+//        canvas.clipPath(mBackground.getClipPath());
 
         mPreviewItemManager.draw(canvas);
 
         canvas.restoreToCount(saveCount);
-
-        if (!mBackground.drawingDelegated()) {
-            mBackground.drawBackgroundStroke(canvas);
-        }
+//
+//        if (!mBackground.drawingDelegated()) {
+//            mBackground.drawBackgroundStroke(canvas);
+//        }
 
         drawBadge(canvas);
     }

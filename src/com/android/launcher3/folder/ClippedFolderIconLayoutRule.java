@@ -2,10 +2,10 @@ package com.android.launcher3.folder;
 
 public class ClippedFolderIconLayoutRule {
 
-    public static final int MAX_NUM_ITEMS_IN_PREVIEW = 4;
+    public static final int MAX_NUM_ITEMS_IN_PREVIEW = Integer.MAX_VALUE;
     private static final int MIN_NUM_ITEMS_IN_PREVIEW = 2;
 
-    private static final float MIN_SCALE = 0.48f;
+    private static final float MIN_SCALE = 0.22f;
     private static final float MAX_SCALE = 0.58f;
     private static final float MAX_RADIUS_DILATION = 0.15f;
     private static final float ITEM_RADIUS_SCALE_FACTOR = 1.33f;
@@ -27,6 +27,14 @@ public class ClippedFolderIconLayoutRule {
         mIconSize = intrinsicIconSize;
         mIsRtl = rtl;
         mBaselineIconScale = availableSpace / (intrinsicIconSize * 1f);
+    }
+
+    private int getRow(int index) {
+        return index / 3 + 1;
+    }
+
+    private int getCol(int index) {
+        return (index) % 3;
     }
 
     public PreviewItemDrawingParams computePreviewItemDrawingParams(int index, int curNumItems,
@@ -53,6 +61,12 @@ public class ClippedFolderIconLayoutRule {
 
         transX = mTmpPoint[0];
         transY = mTmpPoint[1];
+
+        int padl = 15;
+        int padt = 15;
+        int tempIndex = index % 9;
+        transX = padl + mIconSize * MIN_SCALE * getCol(tempIndex) + getCol(tempIndex) * 5;
+        transY = padt + mIconSize * MIN_SCALE * (getRow(tempIndex) - 1) + (getRow(tempIndex) - 1) * 5;
 
         if (params == null) {
             params = new PreviewItemDrawingParams(transX, transY, totalScale, overlayAlpha);

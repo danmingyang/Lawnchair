@@ -207,12 +207,11 @@ public class PreviewBackground {
     }
 
     public void drawBackground(Canvas canvas) {
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(getBgColor());
+        drawRoundRect(canvas, 0 );
 
-        FolderShape.sInstance.drawShape(canvas, getOffsetX(), getOffsetY(), getScaledRadius(), mPaint);
-
-        drawShadow(canvas);
+//        FolderShape.sInstance.drawShape(canvas, getOffsetX(), getOffsetY(), getScaledRadius(), mPaint);
+//
+//        drawShadow(canvas);
     }
 
     public void drawShadow(Canvas canvas) {
@@ -301,6 +300,14 @@ public class PreviewBackground {
         FolderShape.sInstance.drawShape(canvas, getOffsetX(), getOffsetY(), getScaledRadius(), mPaint);
 
         mScale = originalScale;
+    }
+
+    private void drawRoundRect(Canvas canvas,float deltaRadius) {
+        float radius = getScaledRadius();
+        mPaint.setColor(ColorUtils.setAlphaComponent(mBgColor, mStrokeAlpha));
+        mPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawRoundRect(0 + getOffsetX(), 0 + getOffsetY(), radius * 2 + getOffsetX(),
+                radius * 2 + getOffsetY(), 30, 30, mPaint);
     }
 
     private void drawCircle(Canvas canvas,float deltaRadius) {

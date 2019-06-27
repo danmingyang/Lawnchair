@@ -91,8 +91,11 @@ public class FolderPagedView extends PagedView<PageIndicatorDots> {
     public FolderPagedView(Context context, AttributeSet attrs) {
         super(context, attrs);
         InvariantDeviceProfile profile = LauncherAppState.getIDP(context);
-        mMaxCountX = profile.numFolderColumns;
-        mMaxCountY = profile.numFolderRows;
+        // @author: dmy
+//        mMaxCountX = profile.numFolderColumns;
+//        mMaxCountY = profile.numFolderRows;
+        mMaxCountX = 3;
+        mMaxCountY = 3;
 
         mMaxItemsPerPage = mMaxCountX * mMaxCountY;
 
@@ -127,27 +130,35 @@ public class FolderPagedView extends PagedView<PageIndicatorDots> {
             done = true;
         } else {
             done = false;
+            //author:dmy
+            if(count >3){
+                gridCountX = 3;
+                gridCountY = (count+1)/4 + 1;
+            }else{
+                gridCountX = count;
+                gridCountY =1 ;
+            }
         }
 
-        while (!done) {
-            int oldCountX = gridCountX;
-            int oldCountY = gridCountY;
-            if (gridCountX * gridCountY < count) {
-                // Current grid is too small, expand it
-                if ((gridCountX <= gridCountY || gridCountY == maxCountY)
-                        && gridCountX < maxCountX) {
-                    gridCountX++;
-                } else if (gridCountY < maxCountY) {
-                    gridCountY++;
-                }
-                if (gridCountY == 0) gridCountY++;
-            } else if ((gridCountY - 1) * gridCountX >= count && gridCountY >= gridCountX) {
-                gridCountY = Math.max(0, gridCountY - 1);
-            } else if ((gridCountX - 1) * gridCountY >= count) {
-                gridCountX = Math.max(0, gridCountX - 1);
-            }
-            done = gridCountX == oldCountX && gridCountY == oldCountY;
-        }
+//        while (!done) {
+//            int oldCountX = gridCountX;
+//            int oldCountY = gridCountY;
+//            if (gridCountX * gridCountY < count) {
+//                // Current grid is too small, expand it
+//                if ((gridCountX <= gridCountY || gridCountY == maxCountY)
+//                        && gridCountX < maxCountX) {
+//                    gridCountX++;
+//                } else if (gridCountY < maxCountY) {
+//                    gridCountY++;
+//                }
+//                if (gridCountY == 0) gridCountY++;
+//            } else if ((gridCountY - 1) * gridCountX >= count && gridCountY >= gridCountX) {
+//                gridCountY = Math.max(0, gridCountY - 1);
+//            } else if ((gridCountX - 1) * gridCountY >= count) {
+//                gridCountX = Math.max(0, gridCountX - 1);
+//            }
+//            done = gridCountX == oldCountX && gridCountY == oldCountY;
+//        }
 
         out[0] = gridCountX;
         out[1] = gridCountY;

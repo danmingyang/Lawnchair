@@ -24,7 +24,6 @@ import com.android.launcher3.LauncherModel.CallbackTask;
 import com.android.launcher3.LauncherModel.Callbacks;
 import com.android.launcher3.LauncherModel.ModelUpdateTask;
 import com.android.launcher3.ShortcutInfo;
-import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.ItemInfoMatcher;
 import com.android.launcher3.util.MultiHashMap;
@@ -62,9 +61,7 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
                 Log.d(TAG, "Ignoring model task since loader is pending=" + this);
             }
             // Loader has not yet run.
-            if(!FeatureFlags.NO_ENABLE_HOME_DRAWER){
-                return;
-            }
+            return;
         }
         execute(mApp, mDataModel, mAllAppsList);
     }

@@ -87,29 +87,6 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
         mPackages = packages;
     }
 
-    private void updateToWorkSpace(Context context, LauncherAppState app, AllAppsList appsList){
-        final List<UserHandle> profiles = UserManagerCompat.getInstance(context).getUserProfiles();
-        ArrayList<Pair<ItemInfo, Object>> installQueue = new ArrayList<>();
-
-        ArrayList<InstallShortcutReceiver.PendingInstallShortcutInfo> added = new ArrayList<InstallShortcutReceiver.PendingInstallShortcutInfo>();
-        for (UserHandle user : profiles) {
-            final List<LauncherActivityInfo> apps = LauncherAppsCompat.getInstance(context).getActivityList(null, user);
-            synchronized (this) {
-                for (LauncherActivityInfo info : apps) {
-                    for (AppInfo appInfo : appsList.added) {
-                        if(info.getComponentName().equals(appInfo.componentName)){
-                            InstallShortcutReceiver.PendingInstallShortcutInfo mPendingInstallShortcutInfo =  new InstallShortcutReceiver.PendingInstallShortcutInfo(info,context);
-                            added.add(mPendingInstallShortcutInfo);
-                            installQueue.add(mPendingInstallShortcutInfo.getItemInfo());
-                        }
-                    }
-                }
-            }
-        }
-        if (!added.isEmpty()) {
-            app.getModel().addAndBindAddedWorkspaceItems(installQueue);
-        }
-    }
 
     @Override
     public void execute(LauncherAppState app, BgDataModel dataModel, AllAppsList appsList) {
@@ -195,10 +172,6 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
 
         final ArrayList<AppInfo> addedOrModified = new ArrayList<>();
         addedOrModified.addAll(appsList.added);
-        //@author:dmy  应用安装后，添加到桌面
-        if(FeatureFlags.NO_ENABLE_HOME_DRAWER){
-            updateToWorkSpace(context, app, appsList);
-        }
 
         appsList.added.clear();
         addedOrModified.addAll(appsList.modified);

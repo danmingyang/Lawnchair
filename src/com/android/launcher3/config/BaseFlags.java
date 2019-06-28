@@ -60,6 +60,4 @@ abstract class BaseFlags {
     // trying to make them fit the orientation the device is in.
     public static final boolean OVERVIEW_USE_SCREENSHOT_ORIENTATION = true;
 
-    // @author:dmy  显示所有应用
-    public static final boolean NO_ENABLE_HOME_DRAWER = true;
 }

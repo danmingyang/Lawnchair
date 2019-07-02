@@ -16,6 +16,8 @@
 
 package com.android.launcher3;
 
+import static ch.deletescape.lawnchair.settings.ui.SettingsActivity.NOTIFICATION_BADGING;
+
 import android.content.ComponentName;
 import android.content.ContentProviderClient;
 import android.content.Context;
@@ -23,7 +25,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Looper;
 import android.util.Log;
-
 import ch.deletescape.lawnchair.LawnchairAppKt;
 import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.compat.PackageInstallerCompat;
@@ -33,11 +34,8 @@ import com.android.launcher3.notification.NotificationListener;
 import com.android.launcher3.util.ConfigMonitor;
 import com.android.launcher3.util.Preconditions;
 import com.android.launcher3.util.SettingsObserver;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-
-import static ch.deletescape.lawnchair.settings.ui.SettingsActivity.NOTIFICATION_BADGING;
 //LauncherAppState：单例对象，构造方法中初始化对象、注册应用安装、卸载、更新，配置变化等广播。
 //这些广播用来实时更新桌面图标等，其receiver的实现在LauncherModel类中，LauncherModel也在这里初始化
 public class LauncherAppState {
@@ -91,9 +89,11 @@ public class LauncherAppState {
         Log.v(Launcher.TAG, "LauncherAppState initiated", new Throwable());
         Preconditions.assertUIThread();
         mContext = context;
-
+        // 初始化固定的设备配置
         mInvariantDeviceProfile = new InvariantDeviceProfile(mContext);
+        //初始化图标管理工具
         mIconCache = new IconCache(mContext, mInvariantDeviceProfile);
+        //初始化Widget加载混存工具
         mWidgetCache = new WidgetPreviewLoader(mContext, mIconCache);
         mModel = new LauncherModel(this, mIconCache, AppFilter.newInstance(mContext));
 
@@ -117,7 +117,7 @@ public class LauncherAppState {
         if (FeatureFlags.IS_DOGFOOD_BUILD) {
             filter.addAction(ACTION_FORCE_ROLOAD);
         }
-
+        //动态注册广播
         mContext.registerReceiver(mModel, filter);
         UserManagerCompat.getInstance(mContext).enableAndResetCache();
         new ConfigMonitor(mContext).register();

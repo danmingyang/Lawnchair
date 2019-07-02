@@ -71,7 +71,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-// 核心数据库类，负责launcher.db的创建与维护。
+// 核心数据库类，负责launcher.db的创建与维护。  ContentProvider主要用于不同的应用程序之间实现数据共享功能
 public class LauncherProvider extends ContentProvider {
     private static final String TAG = "LauncherProvider";
     private static final boolean LOGD = false;

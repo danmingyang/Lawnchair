@@ -30,7 +30,23 @@ import com.android.launcher3.util.ComponentKey
 import com.android.launcher3.util.LooperExecutor
 import java.util.concurrent.Semaphore
 
+/**
+ * String有可空类型: String?
+例如： val a : String? = null
+
+如果声明变量的时候为String 则字符串不能为空
+例如：val b: String = null  //编译器会报错
+
+如果字符串设置为可空类型时，在使用字符串的时候必须加上!!(表示我已确认字符串
+不为空) 或者? (选择性输入，为空则不输出)
+例如：
+val c: String? = "Hello world"
+println(a.Length)  //编译器报错
+println(a!!.Length) //正确
+println(a?.Length) //正确
+ */
 abstract class IconPack(val context: Context, val packPackageName: String) {
+    // Semaphore 用户限制线程并发的数量Semaphore(0)表示最多只能有1个对象
     private var waiter: Semaphore? = Semaphore(0)
     private val indexCompat by lazy { AlphabeticIndexCompat(context) }
     private val loadCompleteListeners = ArrayList<(IconPack) -> Unit>()
@@ -38,6 +54,7 @@ abstract class IconPack(val context: Context, val packPackageName: String) {
     fun executeLoadPack() {
         LooperExecutor(LauncherModel.getIconPackLooper()).execute {
             loadPack()
+            //waiter为Semaphore?，可空，所以这里调用必须要?. 直接用waiter.release编译器报错
             waiter?.release()
             loadCompleteListeners.forEach { it.invoke(this) }
             loadCompleteListeners.clear()

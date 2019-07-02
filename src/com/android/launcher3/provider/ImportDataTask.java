@@ -365,6 +365,9 @@ public class ImportDataTask {
                 }
 
                 // Wait until we found a provider with matching authority.
+                // TextUtils.isEmpty判断字符串是否为空
+                // checkPermission判断是否有这个权限
+                // checkPermission判断是有这个权限
                 if (sourceAuthority.equals(info.authority)) {
                     if (TextUtils.isEmpty(info.readPermission) ||
                             context.checkPermission(info.readPermission, Process.myPid(),

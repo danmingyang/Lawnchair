@@ -144,6 +144,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     private static final Rect sTmpRect = new Rect();
 
     protected final Rect mInsets = new Rect();
+    //mIsRtl这个是判断手机布局是从左到右还是从右到左，我们正常的习惯是从左到右，
+    // 一些国家，比如阿拉伯语情况下是从右到左，因此此处要进行处理。
     protected boolean mIsRtl;
 
     // Similar to the platform implementation of isLayoutValid();
@@ -497,8 +499,10 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         super.forceLayout();
     }
 
+    // 重写onMeasure，自定义view的尺寸
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // 如果没有子View则按照父类的尺寸进行测量
         if (getChildCount() == 0) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             return;
@@ -506,6 +510,13 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
         // We measure the dimensions of the PagedView to be larger than the pages so that when we
         // zoom out (and scale down), the view is still contained in the parent
+        //上面这句话是说我们在测量尺寸时要比我们正常状态下的尺寸要大，为什么要
+        //大？当你长按桌面时，桌面的workspace会缩小，
+        //此时弹出菜单，CellLayout缩小，然后你可以拖动CellLayout改变顺序，
+        //如果你没有放大PagedView的尺寸，你在缩小时，在整个屏幕上的
+        //workspace就不会沾满整个屏幕，导致你拖动困难。
+
+
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -1051,6 +1062,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         mAllowOverScroll = enable;
     }
 
+    //workspace滑动就是onTouchEvent事件，关键代码也在这个方法里面，workspace继承PagedView，因此他的onTouchEvent事件是在PagedView中实现的
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         super.onTouchEvent(ev);
@@ -1085,8 +1097,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             }
             break;
 
-        case MotionEvent.ACTION_MOVE:
-            if (mTouchState == TOUCH_STATE_SCROLLING) {
+        case MotionEvent.ACTION_MOVE:  //这里没有拖动重新排序 Todo
+            if (mTouchState == TOUCH_STATE_SCROLLING) {//滚动
                 // Scroll to follow the motion event
                 final int pointerIndex = ev.findPointerIndex(mActivePointerId);
 

@@ -182,6 +182,7 @@ public class LoaderTask implements Runnable {
 
             // second step
             TraceHelper.partitionSection(TAG, "step 2.1: loading all apps");
+            //绑定所有应用其实是绑定二级界面的所有应用图标
             loadAllApps();
 
             TraceHelper.partitionSection(TAG, "step 2.2: Binding all apps");
@@ -832,6 +833,7 @@ public class LoaderTask implements Runnable {
         mIconCache.updateDbIcons(packagesToIgnore);
     }
 
+    //首先加载手机里的所有应用信息，然后生成对应的对象，最后通过调用callbacks.bindAllApplications方法将所有应用绑定到二级界面
     private void loadAllApps() {
         final List<UserHandle> profiles = mUserManager.getUserProfiles();
 
@@ -854,6 +856,7 @@ public class LoaderTask implements Runnable {
         }
 
         if (FeatureFlags.LAUNCHER3_PROMISE_APPS_IN_ALL_APPS) {
+            //在安装APP的时候会创建session数据，这里是获取...SessionInfo代表安装会话的详细信息
             // get all active sessions and add them to the all apps list
             for (PackageInstaller.SessionInfo info :
                     mPackageInstaller.getAllVerifiedSessions()) {

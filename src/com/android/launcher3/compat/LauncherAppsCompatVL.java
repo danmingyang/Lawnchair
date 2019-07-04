@@ -37,7 +37,7 @@ import com.android.launcher3.shortcuts.ShortcutInfoCompat;
 import com.android.launcher3.util.PackageUserKey;
 import java.util.ArrayList;
 import java.util.List;
-
+//LauncherAppsCompatVL是sdk版本高于21的系统的处理,21之后LauncherApps可以
 public class LauncherAppsCompatVL extends LauncherAppsCompat {
 
     protected final LauncherApps mLauncherApps;

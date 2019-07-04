@@ -294,7 +294,7 @@ public abstract class ButtonDropTarget extends TextView
     public void prepareAccessibilityDrop() { }
 
     public abstract void onAccessibilityDrop(View view, ItemInfo item);
-
+    //原生桌面的卸载应用是将图标拖拽到卸载框进行卸载的，关于拖拽的操作流程我们后续会详细讲解，这里我们直接看拖拽到相应位置的处理，在完成拖拽时会调用completeDrop这个方法
     public abstract void completeDrop(DragObject d);
 
     @Override

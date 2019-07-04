@@ -891,7 +891,9 @@ public class Workspace extends PagedView<PageIndicatorDots>
             int screenId = (int) info.screenId;
             x = mLauncher.getHotseat().getCellXFromOrder(screenId);
             y = mLauncher.getHotseat().getCellYFromOrder(screenId);
+
         }
+        //spanX就是横向占用的单元格个数，相应的spanY就是Y方向的占用个数
         addInScreen(child, info.container, info.screenId, x, y, info.spanX, info.spanY);
     }
 
@@ -917,6 +919,7 @@ public class Workspace extends PagedView<PageIndicatorDots>
      */
     private void addInScreen(View child, long container, long screenId, int x, int y,
             int spanX, int spanY) {
+        // 先判断容器是什么
         if (container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
             if (getScreenWithId(screenId) == null) {
                 Log.e(TAG, "Skipping child, screenId " + screenId + " not found");
@@ -2969,6 +2972,7 @@ public class Workspace extends PagedView<PageIndicatorDots>
 
     /**
      * For opposite operation. See {@link #addInScreen}.
+     * 从CellLayout中删除对应的图标
      */
     public void removeWorkspaceItem(View v) {
         CellLayout parentCell = getParentCellLayoutForView(v);
